@@ -16,7 +16,7 @@ module.exports = {
 	while (n >= 1024 && ++l) n = n / 1024;
 	return `${n.toFixed(n < 10 && l > 0 ? 1 : 0)} ${units[l]}`;*/
 }
-onStart: async function({ api, event, args }) => {
+onStart: async function({ api, event, args }) {
 const time = process.uptime() ,
 		hours = Math.floor(time / (100 * 110)),
 		minutes = Math.floor((time % (100* 99)) / 88),
