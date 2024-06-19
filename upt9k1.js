@@ -31,9 +31,12 @@ module.exports = {
         const moment = require("moment-timezone");
         const timeNow = moment.tz("Asia/Dhaka").format("DD/MM/YYYY || HH:mm:ss");
         const axios = require('axios');
-        const pidusage = await global.nodemodule["pidusage"](process.pid);
-        const timeStart = Date.now();
         const fs = require('fs-extra');
+        const pidusage = require('pidusage');  // Require pidusage directly
+
+        // Get process usage stats
+        const usage = await pidusage(process.pid);
+        const timeStart = Date.now();
 
         // Font setup
         const fontFiles = [
@@ -123,7 +126,7 @@ module.exports = {
         fs.writeFileSync(pathImg, imageBuffer);
 
         return api.sendMessage({
-            body: `┃======{ 𝗨𝗣𝗧𝗜𝗠𝗘 𝗥𝗢𝗕𝗢𝗧 }======┃\n\n→ Bot worked  ${hours} hours ${minutes} minutes ${seconds} seconds \n•━━━━━━━━━━━━━━━━━━━━━━━━•\ＸＮＩＬ░Ｂ♢Ｔ\n➠ Bo𝐭 Name: ${global.config.BOTNAME}\n➠ Bot Prefix: ${global.GoatBot.config.prefix}\n➠ Commands count: ${commands.size}\n➠ Total Users: ${global.data.allUserID.length}\n➠ Total thread: ${global.data.allThreadID.length}\n➠ CPU in use: ${pidusage.cpu.toFixed(1)}%\n➠ RAM: ${this.byte2mb(pidusage.memory)}\n➠ Ping: ${Date.now() - timeStart}ms\n➠ Character ID: ${id}\n•━━━━━━━━━━━━━━━━━━━━━━━━•\n[ ${timeNow} ]`,
+            body: `┃======{ 𝗨𝗣𝗧𝗜𝗠𝗘 𝗥𝗢𝗕𝗢𝗧 }======┃\n\n→ Bot worked  ${hours} hours ${minutes} minutes ${seconds} seconds \n•━━━━━━━━━━━━━━━━━━━━━━━━•\ＸＮＩＬ░Ｂ♢Ｔ\n➠ Bo𝐭 Name: ${global.config.BOTNAME}\n➠ Bot Prefix: ${global.GoatBot.config.prefix}\n➠ Commands count: ${commands.size}\n➠ Total Users: ${global.data.allUserID.length}\n➠ Total thread: ${global.data.allThreadID.length}\n➠ CPU in use: ${usage.cpu.toFixed(1)}%\n➠ RAM: ${this.byte2mb(usage.memory)}\n➠ Ping: ${Date.now() - timeStart}ms\n➠ Character ID: ${id}\n•━━━━━━━━━━━━━━━━━━━━━━━━•\n[ ${timeNow} ]`,
             attachment: fs.createReadStream(pathImg)
         },
         event.threadID,
